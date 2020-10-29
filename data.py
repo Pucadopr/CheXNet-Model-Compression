@@ -15,17 +15,17 @@ import academictorrents as at
 parser = argparse.ArgumentParser()
 
 # The dataset downloaded are the resized ones (224x224)
-parser.add_argument('--dataset', default='NIH',
- choices=['NIH', 'RSNA', 'Pad-Chest', 'Openi'], 
- help='dataset name')
-## Add more parser as need requires
+parser.add_argument('--dataset', default='NIH', choices=['NIH', 'RSNA', 'Pad-Chest', 'Openi'],
+                    help='dataset name')
+
+# Add more parser as need requires
 args = parser.parse_args()
 
 # dictionary of hash to download data from academictorrents
-data_hash_dict = {'NIH': "e615d3aebce373f1dc8bd9d11064da55bdadede0", 
-'RSNA': "95588a735c9ae4d123f3ca408e56570409bcf2a9", 
-'Pad-Chest': "96ebb4f92b85929eadfb16761f310a6d04105797",
-'Openi': "5a3a439df24931f410fac269b87b050203d9467d"}
+data_hash_dict = {'NIH': "e615d3aebce373f1dc8bd9d11064da55bdadede0",
+                  'RSNA': "95588a735c9ae4d123f3ca408e56570409bcf2a9",
+                  'Pad-Chest': "96ebb4f92b85929eadfb16761f310a6d04105797",
+                  'Openi': "5a3a439df24931f410fac269b87b050203d9467d"}
 
 
 # Print the dataset that its downloading
