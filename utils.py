@@ -24,5 +24,12 @@ def check_file_exists(file):
         raise Exception("csv file passed does not exist")
 
 def save_checkpoint(state, filename='checkpoint'):
-
     torch.save(state, 'checkpoint/{}_best.pth.tar'.format(filename))
+
+def print_size_of_model(model):
+    torch.save(model.state_dict(), "temp.p")
+    size= os.path.getsize("temp.p")/1e6
+    print('Size (MB):', size)
+    os.remove('temp.p')
+    
+    return size

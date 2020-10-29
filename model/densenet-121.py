@@ -4,6 +4,7 @@ import torch.nn.functional as F
 
 
 class DenseNet121(nn.Module):
+    
     def __init__(self, num_classes, is_pretrained):
         super(DenseNet121, self).__init__()
         self.densenet121 = torchvision.models.densenet121(pretrained=is_pretrained)
