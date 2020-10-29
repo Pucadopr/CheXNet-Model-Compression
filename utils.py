@@ -74,3 +74,13 @@ def save_checkpoint(state, is_best, filepath):
         shutil.copyfile(os.path.join(filepath, 'checkpoint.pth.tar'),
                         os.path.join(filepath, 'model_best.pth.tar'))
         # torch.save(state, 'checkpoint/{}_best.pth.tar'.format(filename))
+
+
+def print_size_of_model(model):
+    torch.save(model.state_dict(), "temp.p")
+    size= os.path.getsize("temp.p")/1e6
+    print('Size (MB):', size)
+    os.remove('temp.p')
+    
+    return size
+
