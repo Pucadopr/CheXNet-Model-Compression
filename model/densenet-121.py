@@ -45,11 +45,11 @@ class DenseNet121(nn.Module):
         return out
 
     def fuse_model(self):
-        for name, m in self.named_modules():
-            if type(m) == DenseNet:
-                torch.quantization.fuse_modules(m, ['conv0', 'norm0', 'relu0'], inplace=True)
+        for name, module in self.named_modules():
+            if type(module) == DenseNet:
+                torch.quantization.fuse_modules(module, ['conv0', 'norm0', 'relu0'], inplace=True)
                 
             if name.contains('denselayer'):
-                        torch.quantization.fuse_modules(m, [['norm1', 'relu1', 'conv1'],[['norm2', 'relu2', 'conv2']]], inplace=True)
+                        torch.quantization.fuse_modules(module, [['norm1', 'relu1', 'conv1'],['norm2', 'relu2', 'conv2']], inplace=True)
 
 
