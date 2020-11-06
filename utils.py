@@ -9,6 +9,7 @@ import numpy as np
 import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
+import logging
 import torch.optim as optim
 from torch.utils.data.sampler import SubsetRandomSampler
 from torchvision import transforms
@@ -77,10 +78,20 @@ def save_checkpoint(state, is_best, filepath):
 
 
 def print_size_of_model(model):
+
     torch.save(model.state_dict(), "temp.p")
     size= os.path.getsize("temp.p")/1e6
     print('Size (MB):', size)
     os.remove('temp.p')
     
     return size
+
+def compute_sparsity_of_pruned_layer(module, log=True):
+
+    sparsity = (100. * float(torch.sum(module.weight == 0))
+        / float(module.weight.nelement()))
+    if log:
+        logging.info("Sparsity in {} layer: {}%".format(module, sparsity))
+
+    return sparsity
 
