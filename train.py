@@ -18,7 +18,7 @@ def train(train_loader, model, criterion, optimizer, epoch, print_freq):
     for i, (data, target) in enumerate(train_loader):
         # measure data loading time
         data_time.update(time.time() - end)
-
+        device = torch.device("cpu")
         data, target = data.to(device), target.to(device)
         input_var = torch.autograd.Variable(data)
         target_var = torch.autograd.Variable(target)
