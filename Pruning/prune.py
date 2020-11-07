@@ -34,7 +34,7 @@ class PruningModule(Module):
 
         for name, module in self.named_modules():
             if name.contains('denselayer'):
-                module.prune(threshold=percentile_value)
+                prune.ln_structured(module, name='weight', amount=percentile_value, n=2, dim=0)
 
     def l1_unstructured_pruning(self, percent=0.2):
         '''
@@ -67,9 +67,9 @@ class PruningModule(Module):
 
         parameters_to_prune = (
             (self.avgpool2d, 'weight'),
-            (self.Conv2d, 'weight'),
+            (self.conv2, 'weight'),
             (self.linear, 'weight'),
-            (self.BatchNorm2d, 'weight'),
+            (self.batchnorm2, 'weight'),
             (self.denselayer, 'weight')
         )
         prune.global_unstructured(parameters_to_prune, pruning_method=prune.L1Unstructured, amount=percent)
