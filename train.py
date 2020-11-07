@@ -53,4 +53,6 @@ def train(train_loader, model, criterion, optimizer, epoch, print_freq):
                    epoch, i, len(train_loader), batch_time=batch_time,
                    data_time=data_time, loss=losses, top1=top1, top5=top5))
 
+        return model
+
 
