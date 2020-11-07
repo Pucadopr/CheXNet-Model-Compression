@@ -91,7 +91,7 @@ def compute_sparsity_of_pruned_layer(module, log=True):
     sparsity = (100. * float(torch.sum(module.weight == 0))
         / float(module.weight.nelement()))
     if log:
-        logging.info("Sparsity in {} layer: {}%".format(module, sparsity))
+        logging.info("Sparsity in {} layer: {}%".format(module.name, sparsity))
 
     return sparsity
 
