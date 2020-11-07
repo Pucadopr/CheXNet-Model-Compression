@@ -19,7 +19,7 @@ class DenseNet121(nn.Module):
     network and if model to be defined is for quantization aware training
     '''
 
-    def __init__(self, num_classes, is_pretrained, quantized=False):
+    def __init__(self, num_classes, is_pretrained=False, quantized=False):
         super(DenseNet121, self).__init__()
         self.quantize = quantized
         if self.quantize:
