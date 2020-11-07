@@ -6,14 +6,14 @@ from utils import check_file_exists, check_path_exists
 from PIL import Image
 
 
-class DatasetLoader(Dataset):
+class NIHDatasetLoader(Dataset):
 
-    def __init__(self, img_dir, transform=None, masks=False):
+    def __init__(self, img_dir, xray_csv, bbox_csv, transform=None, masks=False):
 
         self.transform = transform
         self.path_to_images = img_dir
-        self.df = pd.read_csv(os.path.join(os.path.dirname(img_dir), "Data_Entry_2017.csv"))
-        self.masks = pd.read_csv(os.path.join(os.path.dirname(img_dir), "BBox_List_2017.csv"), 
+        self.df = pd.read_csv(xray_csv)
+        self.masks = pd.read_csv((bbox_csv), 
                 names=["Image Index","Finding Label","x","y","w","h","_1","_2","_3"],
                skiprows=1)
 
@@ -64,4 +64,4 @@ class DatasetLoader(Dataset):
         if self.transform:
             image = self.transform(image)
 
-        return (image, label, self.df.index[idx])
+        return (image, label)
