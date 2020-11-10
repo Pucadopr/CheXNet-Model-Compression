@@ -1,10 +1,11 @@
 from utils import AverageMeter, accuracy
 import time
+from quantization import quantize
 
 import torch
 
 
-def train(train_loader, model, criterion, optimizer, epoch, print_freq):
+def train(train_loader, model, criterion, optimizer, epoch, print_freq, quant=False):
     batch_time = AverageMeter()
     data_time = AverageMeter()
     losses = AverageMeter()
@@ -13,6 +14,9 @@ def train(train_loader, model, criterion, optimizer, epoch, print_freq):
 
     # switch to train mode
     model.train()
+
+    if quant:
+        quantize.qat_quantize_prepare(model)
 
     end = time.time()
     for i, (data, target) in enumerate(train_loader):
