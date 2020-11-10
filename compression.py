@@ -2,7 +2,8 @@
 File to compress model using pruning or quantization techniques
 """
 from pruning.prune import PruningModule
-import quantization.quantize as qaunt
+import quantization.quantize as quant
+from test import validate
 import utils
 import argparse
 from train import train
@@ -15,21 +16,26 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import random_split
+import logging
+import torchxrayvision as xrv
 from torchvision import datasets, transforms
 from tqdm import tqdm
 from model.densenet import DenseNet121
 from dataset_loader import NIHDatasetLoader
 from utils import print_size_of_model
-
+import finetune
+import preprocess
 
 parser = argparse.ArgumentParser(description='CheXNet Model compression for low edged devices')
 
 parser.add_argument('--model', default='nih', choices=['kaggle', 'nih', 'pc', 'chex'],
                     help='model name for compression')
 parser.add_argument('--compress-type', default='prune', choices=['prune', 'quantize'],
-                    help='type of compression method to use')
+                    help='type of compression technique to use')
 parser.add_argument('--compress-method', default='dynamic', choices=['static', 'dynamic'],
                     help='type of compression method to use')
+parser.add_argument('--pretrained', default='true', choices=['true', 'false'],
+                    help='if to use a pretrained model or train a chexnet model')
 parser.add_argument('--batch-size', type=int, default=1000, metavar='N',
                     help='input batch size for training (default: 1000)')
 parser.add_argument('--epochs', type=int, default=100, metavar='N',
@@ -43,7 +49,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
 parser.add_argument('--seed', type=int, default=42, metavar='S',
                     help='random seed (default: 42)')
 parser.add_argument('--log-interval', type=int, default=10, metavar='N',
-                    help='how many batches to wait before logging training status')
+                    help='interval between logging training status')
 parser.add_argument('--log', type=str, default='log.txt',
                     help='log file name')
 parser.add_argument('--sensitivity', type=float, default=2,
@@ -52,50 +58,23 @@ parser.add_argument('--sensitivity', type=float, default=2,
 
 args = parser.parse_args()
 
-image_path, x_ray_path, bbox_path = get_nih_data_paths()
+if args.pretrained:
 
-mean = [0.485, 0.456, 0.406]
-std = [0.229, 0.224, 0.225]
+    if args.compress_type=='dynamic':
+        logging.warning("dynamic compression unavailable for pretrained model using static instead")
 
-transform = transforms.Compose([
-            transforms.RandomHorizontalFlip(),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            transforms.Normalize(mean, std)
-            ])
-dataset = NIHDatasetLoader(image_path, x_ray_path, bbox_path, transform)
+    finetune.finetune_pretrained_model(args.model, args.compress_type, args.batch_size, args.log_interval, 0.3)
 
-train_dataset = []
-test_dataset = []
+else:
+       
+    preprocess.preprocess_model(args.compress_type, args.batch_size, args.seed, args.lr, args.weight_decay, args.epochs, 0.2, args.log_interval)
 
-for i, data in enumerate(dataset):
-    train_size = int(0.5 * len(dataset))
-    test_size = len(data) - train_size
-    torch.manual_seed(args.seed)
-    train_dataset, test_dataset = random_split(data, [train_size, test_size])
 
-train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size= args.batch_size, shuffle=True, num_workers=8)
-test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size= args.batch_size, shuffle=True, num_workers=8)
 
-no_of_labels = 14
-model = DenseNet121(no_of_labels)
 
-if args.compress_type =='quantize':
-    model = DenseNet121(14, False, True)
-    model.fuse_model()
 
-print_size_of_model(model)
-model = model.cuda()
 
-criterion = nn.BCELoss()
-optimizer = optim.SGD(filter(
-            lambda p: p.requires_grad,
-            model.parameters()),
-            lr=args.lr,
-            momentum=0.9,
-            weight_decay=args.weight_decay)
 
-model =train(train_dataloader, model, criterion, optimizer, args.epochs, 10)
 
 
 
