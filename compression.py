@@ -1,28 +1,8 @@
 """
 File to compress model using pruning or quantization techniques
 """
-from pruning.prune import PruningModule
-import quantization.quantize as quant
-from test import validate
-import utils
-import argparse
-from train import train
-import test
-import os
-from data import get_nih_data_paths
-import numpy as np
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from torch.utils.data import random_split
 import logging
-import torchxrayvision as xrv
-from torchvision import datasets, transforms
-from tqdm import tqdm
-from model.densenet import DenseNet121
-from dataset_loader import NIHDatasetLoader
-from utils import print_size_of_model
+import argparse
 import finetune
 import preprocess
 
@@ -66,19 +46,5 @@ if args.pretrained:
     finetune.finetune_pretrained_model(args.model, args.compress_type, args.batch_size, args.log_interval, 0.3)
 
 else:
-       
+
     preprocess.preprocess_model(args.compress_type, args.batch_size, args.seed, args.lr, args.weight_decay, args.epochs, 0.2, args.log_interval)
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
