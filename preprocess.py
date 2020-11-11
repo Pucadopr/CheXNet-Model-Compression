@@ -6,27 +6,23 @@ import quantization.quantize as quant
 from test import validate
 import utils
 from train import train
-import test
 from data import get_nih_data_paths
-import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import random_split
 import logging
-import torchxrayvision as xrv
 from torchvision import datasets, transforms
-from tqdm import tqdm
 from model.densenet import DenseNet121
 from dataset_loader import NIHDatasetLoader
 from utils import print_size_of_model
-import finetune
-
-
 
 
 def preprocess_model(compress_type, batch_size, seed, lr, weight_decay, epochs, percent=0.2, log_interval=10):
+    '''
+    Method to preprocess, train and compress model using compresstype
+    specified. also takes in other training parameters
+    '''
 
     logging.info(f"downloading and preparing nih dataset for training")
     image_path, x_ray_path, bbox_path = get_nih_data_paths()
