@@ -1,3 +1,4 @@
 # config.py
 .vscode
 testing.py
+__pycache__
