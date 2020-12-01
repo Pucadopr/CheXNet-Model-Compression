@@ -1,7 +1,7 @@
 """
 Method to finetune pretrained models using compression techniques
 """
-from pruning.prune import PruningModule
+import pruning.prune as pr
 import quantization.quantize as quant
 from test import validate
 import utils
@@ -47,7 +47,7 @@ def finetune_pretrained_model(model, compress_type, batch_size, log_interval, pe
     logging.info(f"Initial accuracy of model is {accuracy} %")
     
     if compress_type=='prune':
-        prune = PruningModule(model)
+        prune = pr.PruningModule(model)
         prune.l1_unstructured_pruning(percent)
 
         print_size_of_model(model)
