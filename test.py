@@ -4,9 +4,6 @@ import time
 import torch
 
 
-
-############### Validation #################################################
-
 def validate(val_loader, model, criterion, device, print_freq):
     batch_time = AverageMeter()
     losses = AverageMeter()
@@ -17,8 +14,9 @@ def validate(val_loader, model, criterion, device, print_freq):
     model.eval()
 
     end = time.time()
-    for i, (data, target) in enumerate(val_loader):
-        data, target = data.to(device), target.to(device)
+    for i, data in enumerate(val_loader):
+        data, target = data['img'].to(device), data['lab'].to(device)
+
 
         with torch.no_grad():
             input_var = torch.autograd.Variable(data)

@@ -1,7 +1,7 @@
 """
 Python script used for downloading all the datasets used in this
 project. 
-Data are downloaded to root folder
+Data is downloaded to root folder
 """
 import academictorrents as at
 from torch.utils import data
@@ -30,10 +30,6 @@ def get_nih_data_paths():
     
     x_ray_data_path = os.path.join(path, "Data_Entry_2017.csv")
     bbox_data_path = os.path.join(path, "BBox_List_2017.csv")
-    image_path = os.path.join(path, "images-224")
-
+    image_path = os.path.join(to_path, "images-224")
 
     return image_path, x_ray_data_path, bbox_data_path
-
-
-

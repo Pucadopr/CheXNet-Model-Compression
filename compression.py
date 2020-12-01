@@ -44,6 +44,8 @@ def get_args():
 
 
 def main():
+
+    logging.basicConfig(level=logging.DEBUG)
     args = get_args()
     if args.pretrained:
 
