@@ -1,8 +1,8 @@
 """
 Method to finetune pretrained models using compression techniques
 """
-import pruning.prune as pr
-import quantization.quantize as quant
+from pruning import prune as pr
+from quantization import quantize as quant
 from test import validate
 import utils
 from data import get_nih_data_paths
