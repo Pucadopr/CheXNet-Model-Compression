@@ -3,7 +3,7 @@ Training module for model
 """
 from utils import AverageMeter, accuracy
 import time
-from Quantization import quantize
+from quantization import quantize
 
 import torch
 

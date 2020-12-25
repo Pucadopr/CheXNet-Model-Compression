@@ -45,19 +45,21 @@ def get_args():
 
 def main():
 
-    logging.basicConfig(level=logging.DEBUG)
+    log = logging.getLogger("compression")
+    log.setLevel(logging.DEBUG)
+
     args = get_args()
+
     if args.pretrained:
 
         if args.compress_method=='dynamic':
-            logging.warning("dynamic compression unavailable for pretrained model using static instead")
+            log.warning("dynamic compression unavailable for pretrained model using static compression instead")
 
         finetune.finetune_pretrained_model(args.model, args.compress_type, args.batch_size, args.log_interval, 0.3)
 
     else:
 
         preprocess.preprocess_model(args.compress_type, args.batch_size, args.seed, args.lr, args.weight_decay, args.epochs, 0.2, args.log_interval)
-
 
 if __name__ == "__main__":
     main()

@@ -1,8 +1,8 @@
 """
 File to preprocess and train model using pruning or quantization techniques
 """
-from Pruning.prune import PruningModule
-from Quantization import quantize as quant
+from pruning.prune import PruningModule
+from quantization import quantize as quant
 from test import validate
 import utils
 from train import train
@@ -51,7 +51,7 @@ def preprocess_model(compress_type, batch_size, seed, lr, weight_decay, epochs, 
     train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size= batch_size, shuffle=True, num_workers=8)
     test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size= batch_size, shuffle=True, num_workers=8)
 
-    no_of_labels = 14
+    no_of_labels = 18
 
     # model = model.cuda()
 
