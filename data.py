@@ -20,7 +20,9 @@ def get_nih_data_paths():
     returns the path to the nih images,
     patient csv file and bbox csv file
     '''
-    path = at.get(data_hash_dict.get('NIH'))
+    # path = at.get(data_hash_dict.get('NIH'))
+    cwd = os.getcwd()
+    path = os.path.join(cwd, "NIH")
     to_path = os.path.dirname(path)
     path_to_tar= os.path.join(path, "images-224.tar")
 

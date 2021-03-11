@@ -1,6 +1,9 @@
 from utils import AverageMeter, accuracy
 import time
 import torch
+import numpy as np
+import sklearn, sklearn.metrics
+import torchxrayvision as xrv
 
 
 def validate(val_loader, model, criterion, device, print_freq):
@@ -47,18 +50,51 @@ def validate(val_loader, model, criterion, device, print_freq):
 
     return top1.avg
 
-def pretrained_model_accuracy(val_loader, model, device):
+def pretrained_model_accuracy(d_nih, model, device):
     
-    correct = 0
-    total = 0
-    
+    outs = []
+    labs = []
     with torch.no_grad():
-        for data in val_loader:
-            images, labels = data['img'].to(device), data['lab'].to(device)
-
-            outputs = model(images)
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
+        for i in np.random.randint(0,200,100):
+            sample = d_nih[i]
+            labs.append(sample["lab"])
+            out = model(torch.from_numpy(sample["img"]).unsqueeze(0)).cpu()
+            out = torch.sigmoid(out)
+            outs.append(out.detach().numpy()[0])
     
-    return 100 * correct / total
+    for i in range(14):
+        if len(np.unique(np.asarray(labs)[:,i])) > 1:
+            auc = sklearn.metrics.roc_auc_score(np.asarray(labs)[:,i], np.asarray(outs)[:,i])
+        else:
+            auc = "(Only one class observed)"
+        print(xrv.datasets.default_pathologies[i], auc)
+
+def evaluate_model(model, test_loader, device, criterion=None):
+
+    model.eval()
+    model.to(device)
+
+    running_loss = 0
+    running_corrects = 0
+
+    for inputs, labels in test_loader:
+
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
+        outputs = model(inputs)
+        _, preds = torch.max(outputs, 1)
+
+        if criterion is not None:
+            loss = criterion(outputs, labels).item()
+        else:
+            loss = 0
+
+        # statistics
+        running_loss += loss * inputs.size(0)
+        running_corrects += torch.sum(preds == labels.data)
+
+    eval_loss = running_loss / len(test_loader.dataset)
+    eval_accuracy = running_corrects / len(test_loader.dataset)
+
+    return eval_loss, eval_accuracy

@@ -2,3 +2,6 @@
 .vscode
 testing.py
 __pycache__
+venv
+NIH
+images-224

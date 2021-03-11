@@ -11,11 +11,11 @@ def static_quantize(model, inplace=True):
     model passed must be set to eval mode (model.eval()) for static 
     quantization logic to work
     '''
-    torch.backends.quantized.engine = config.QUANTIZE_ENGINE
-    model.qconfig = torch.quantization.get_default_qconfig(config.QUANTIZE_ENGINE)
+    torch.backends.quantized.engine = 'fbgemm'
+    model.qconfig = torch.quantization.get_default_qconfig('fbgemm')
     # model= torch.quantization.fuse_modules(model, [['conv', 'relu']])
-    model = torch.quantization.prepare(model, inplace)
-    model = torch.quantization.convert(model.cpu(), inplace)
+    model=torch.quantization.prepare(model)
+    model=torch.quantization.convert(model.cpu())
     return model     
 
 def dynamic_quantize(model):
@@ -31,9 +31,12 @@ def qat_quantize_prepare(model, inplace=True):
     model passed must be set to train mode (model.train()) for quantization 
     aware training logic to work
     '''
-    torch.backends.quantized.engine = config.QUANTIZE_ENGINE
-    model.qconfig = torch.quantization.get_default_qat_qconfig(config.QUANTIZE_ENGINE)
+    torch.backends.quantized.engine = 'fbgemm'
+    model.qconfig = torch.quantization.get_default_qat_qconfig('fbgemm')
     model = torch.quantization.prepare_qat(model, inplace)
+
+    model.eval()
+    model = torch.quantization.convert(model)
     return model
 
 def qat_quantize_eval(model):

@@ -1,8 +1,8 @@
 """
 File to preprocess and train model using pruning or quantization techniques
 """
-from pruning.prune import PruningModule
-from quantization import quantize as quant
+from Pruning.prune import PruningModule
+from Quantization import quantize as quant
 from test import validate
 import utils
 from train import train

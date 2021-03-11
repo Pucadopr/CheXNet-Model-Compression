@@ -12,9 +12,9 @@ def get_args():
 
     parser.add_argument('--model', default='nih', choices=['kaggle', 'nih', 'pc', 'chex'],
                         help='model name for compression')
-    parser.add_argument('--compress-type', default='prune', choices=['prune', 'quantize'],
+    parser.add_argument('--compress-type', default='quantize', choices=['prune', 'quantize'],
                         help='type of compression technique to use')
-    parser.add_argument('--compress-method', default='dynamic', choices=['static', 'dynamic'],
+    parser.add_argument('--compress-method', default='static', choices=['static', 'dynamic'],
                         help='type of compression method to use')
     parser.add_argument('--pretrained', default='true', choices=['true', 'false'],
                         help='if to use a pretrained model or train a chexnet model')
