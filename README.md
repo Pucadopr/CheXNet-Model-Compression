@@ -1,6 +1,6 @@
-# Melanoma-Prediction-App
+# ChexNet Model Compression
 
-This app is a melanoma detection application/model trainer. Dataset used for training is the [ISIC Archive](https://www.isic-archive.com/#!/topWithHeader/onlyHeaderTop/gallery?filter=%5B%5D) provided by ISIC (International Skin Imaging Collaboration).
+This app is a pneumonia detection application/model trainer. Dataset used for training is the [ISIC Archive](https://www.isic-archive.com/#!/topWithHeader/onlyHeaderTop/gallery?filter=%5B%5D) provided by ISIC (International Skin Imaging Collaboration).
 
 ##  Model Performance
 
@@ -17,11 +17,11 @@ Model was trained using the ISIS Archive dataset but due to limitations from the
 
 Clone the project:
 ```
-git clone https://github.com/Pucadopr/Melanoma-Prediction-Model.git
+git clone https://github.com/Pucadopr/CheXNet-Model-Compression.git
 ```
 Enter project directory:
 ```
-cd Melanoma-Prediction-Model
+cd CheXNet-Model-Compression
 ```
 Downloading the dataset:
 ```
